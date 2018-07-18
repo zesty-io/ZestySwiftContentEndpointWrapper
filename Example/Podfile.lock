@@ -1,16 +1,29 @@
 PODS:
-  - ZestyJSONAPI (0.1.0)
+  - Alamofire (4.7.3)
+  - SwiftyJSON (4.1.0)
+  - ZestyJSONAPI (0.1.0):
+    - Alamofire (~> 4.7)
+    - SwiftyJSON (~> 4.0)
 
 DEPENDENCIES:
+  - Alamofire (~> 4.7)
+  - SwiftyJSON (~> 4.0)
   - ZestyJSONAPI (from `../`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - SwiftyJSON
 
 EXTERNAL SOURCES:
   ZestyJSONAPI:
     :path: "../"
 
 SPEC CHECKSUMS:
-  ZestyJSONAPI: 03c58fe6a13c9562c9ea6f76c8ae2f3e0f38f30d
+  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
+  SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
+  ZestyJSONAPI: faad5dcba559a4f94b00e99af78ceca2542af63b
 
-PODFILE CHECKSUM: 4f70d45c0f313d6df005a92caac23bfe0e3c917e
+PODFILE CHECKSUM: 1acd6dc0db72de0242c724cecf5bcfd130939cc2
 
 COCOAPODS: 1.5.3

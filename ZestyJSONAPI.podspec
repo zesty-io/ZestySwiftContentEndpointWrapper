@@ -11,6 +11,8 @@ Pod::Spec.new do |s|
   s.version          = '0.1.0'
   s.summary          = 'An easy way to access the Zesty.io Basic JSON API as well as your own custom JSON Endpoints.'
   s.swift_version = '4.0'
+
+  
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
 #   * Try to keep it short, snappy and to the point.
@@ -39,4 +41,8 @@ The ZestyJSONAPI allows users to access their data on their Zesty.io hosted webs
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
+  # s.dependency 'Alamofire', '~> 4.0'
+  s.dependency 'SwiftyJSON', '~> 4.0'
+  s.dependency 'Alamofire', '~> 4.7'
+  s.platform = :ios, "10.0"
 end
