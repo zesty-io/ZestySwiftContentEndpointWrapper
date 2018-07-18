@@ -1,0 +1,16 @@
+PODS:
+  - ZestyJSONAPI (0.1.0)
+
+DEPENDENCIES:
+  - ZestyJSONAPI (from `../`)
+
+EXTERNAL SOURCES:
+  ZestyJSONAPI:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  ZestyJSONAPI: 03c58fe6a13c9562c9ea6f76c8ae2f3e0f38f30d
+
+PODFILE CHECKSUM: 4f70d45c0f313d6df005a92caac23bfe0e3c917e
+
+COCOAPODS: 1.5.3

@@ -29,7 +29,7 @@
 
 /* Begin PBXFileReference section */
 		116B49410EF976A88CAEDD84 /* Pods-ZestyJSONAPI_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZestyJSONAPI_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZestyJSONAPI_Example/Pods-ZestyJSONAPI_Example.release.xcconfig"; sourceTree = "<group>"; };
-		55248A737041A272EAC0C3AE /* ZestyJSONAPI.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = ZestyJSONAPI.podspec; path = ../ZestyJSONAPI.podspec; sourceTree = "<group>"; };
+		55248A737041A272EAC0C3AE /* ZestyJSONAPI.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ZestyJSONAPI.podspec; path = ../ZestyJSONAPI.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		5A3FDD805504490C58A76A9B /* Pods-ZestyJSONAPI_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZestyJSONAPI_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZestyJSONAPI_Tests/Pods-ZestyJSONAPI_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* ZestyJSONAPI_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZestyJSONAPI_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -44,8 +44,8 @@
 		8DCFA5D65FC3571AF178F569 /* Pods_ZestyJSONAPI_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZestyJSONAPI_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F9F041A409E0B75FDBC92ED /* Pods-ZestyJSONAPI_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZestyJSONAPI_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZestyJSONAPI_Tests/Pods-ZestyJSONAPI_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		A4E047E7ADAF781E69E5142A /* Pods-ZestyJSONAPI_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZestyJSONAPI_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZestyJSONAPI_Example/Pods-ZestyJSONAPI_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		A79CCFA974767EEF692B7986 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		F1138A6DBB5A667347EE1782 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		A79CCFA974767EEF692B7986 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		F1138A6DBB5A667347EE1782 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		F235EB47AA741322986D087B /* Pods_ZestyJSONAPI_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZestyJSONAPI_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -212,6 +212,7 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = T3FUT3WUPW;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
@@ -469,6 +470,7 @@
 			baseConfigurationReference = A4E047E7ADAF781E69E5142A /* Pods-ZestyJSONAPI_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = T3FUT3WUPW;
 				INFOPLIST_FILE = ZestyJSONAPI/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -484,6 +486,7 @@
 			baseConfigurationReference = 116B49410EF976A88CAEDD84 /* Pods-ZestyJSONAPI_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = T3FUT3WUPW;
 				INFOPLIST_FILE = ZestyJSONAPI/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;

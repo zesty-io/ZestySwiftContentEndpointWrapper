@@ -1,0 +1,6 @@
+framework module ZestyJSONAPI {
+  umbrella header "ZestyJSONAPI-umbrella.h"
+
+  export *
+  module * { export * }
+}
