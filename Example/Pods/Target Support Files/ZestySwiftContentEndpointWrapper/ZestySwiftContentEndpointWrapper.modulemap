@@ -1,0 +1,6 @@
+framework module ZestySwiftContentEndpointWrapper {
+  umbrella header "ZestySwiftContentEndpointWrapper-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,5 +1,5 @@
 import XCTest
-import ZestyJSONAPI
+import ZestySwiftContentEndpointWrapper
 
 class Tests: XCTestCase {
     
