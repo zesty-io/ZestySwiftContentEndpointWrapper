@@ -42,7 +42,7 @@ public class ZestySwiftContentEndpointWrapper {
     /// For example, creating a ZestySwiftContentEndpointWrapper Object for your website `http://burger.zesty.site`
     ///
     ///     // Create the ZestySwiftContentEndpointWrapper Object
-    ///     let api = ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
+    ///     let zesty ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
     ///
     /// - note: If your website does not have an SSL Certificate (HTTPS), you will need to configure your app to allow for non HTTPS Calls. [How to change this setting](https://stackoverflow.com/questions/31254725/transport-security-has-blocked-a-cleartext-http)
     /// - parameters:
@@ -66,7 +66,7 @@ public class ZestySwiftContentEndpointWrapper {
     /// ----
     ///
     ///     // Create the ZestySwiftContentEndpointWrapper Object
-    ///     let api = ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
+    ///     let zesty ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
     ///     let endpoint = "menulist"
     ///     let parameters = ["location" : "San Diego"]
     ///     getCustomData(from: endpoint, params: parameters, { (json, error) in
@@ -124,10 +124,10 @@ public class ZestySwiftContentEndpointWrapper {
     /// For example, getting a specific item with zuid `6-9bfe5c-ntqxrs`
     ///
     ///     // Create the ZestySwiftContentEndpointWrapper Object
-    ///     let api = ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
+    ///     let zesty ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
     ///     let zuid = "6-9bfe5c-ntqxrs"
     ///
-    ///     api.getItem(for: zuid, { (item, error) in
+    ///     zesty.getItem(for: zuid, { (item, error) in
     ///         if (error != nil) {
     ///             // error handling
     ///             return
@@ -188,10 +188,10 @@ public class ZestySwiftContentEndpointWrapper {
     /// For example, getting a specific item with zuid `7-9bfe5c-ntqxrs`
     ///
     ///     // Create the ZestySwiftContentEndpointWrapper Object
-    ///     let api = ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
+    ///     let zesty ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
     ///     let zuid = "7-9bfe5c-ntqxrs"
     ///
-    ///     api.getArray(for: zuid, { (items, error) in
+    ///     zesty.getArray(for: zuid, { (items, error) in
     ///         if (error != nil) {
     ///             // error handling
     ///             return
@@ -266,10 +266,10 @@ public class ZestySwiftContentEndpointWrapper {
 /// =======
 ///
 ///     // Create the ZestySwiftContentEndpointWrapper Object
-///     let api = ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
+///     let zesty ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
 ///     let zuid = "6-9bfe5c-ntqxrs"
 ///
-///     api.getItem(for: zuid, { (item, error) in
+///     zesty.getItem(for: zuid, { (item, error) in
 ///         if (error != nil) {
 ///             print(error.localizedDescription)
 ///             // error handling
@@ -283,10 +283,10 @@ public class ZestySwiftContentEndpointWrapper {
 /// ========
 ///
 ///     // Create the ZestySwiftContentEndpointWrapper Object
-///     let api = ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
+///     let zesty ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
 ///     let zuid = "6-9bfe5c-ntqxrs"
 ///
-///     api.getItem(for: zuid, { (item, error) in
+///     zesty.getItem(for: zuid, { (item, error) in
 ///         if (error != nil) {
 ///             switch (error) {
 ///                 case .noData:
@@ -336,17 +336,3 @@ public enum ZestyError : Error {
         }
     }
 }
-
-//extension JSON {
-//    mutating func merge(other: JSON) {
-//        for (key, subJson) in other {
-//            self[key] = subJson
-//        }
-//    }
-//
-//    func combine(with other: JSON) -> JSON {
-//        var merged = self
-//        merged.merge(other: other)
-//        return merged
-//    }
-//}
