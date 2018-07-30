@@ -108,7 +108,7 @@ For example, using the custom endpoint `menulist` (Including the extension is on
      let zesty = ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
      let endpoint = "menulist"
      let parameters = ["location" : "San Diego"]
-     getCustomData(from: endpoint, params: parameters, { (json) in
+     getCustomJSONData(from: endpoint, params: parameters, { (json) in
          print(item) // item is a [String : String] dictionary, in JSON Format
      }
 

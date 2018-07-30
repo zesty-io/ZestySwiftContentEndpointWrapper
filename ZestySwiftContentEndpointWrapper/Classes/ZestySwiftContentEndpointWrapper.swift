@@ -51,6 +51,131 @@ public class ZestySwiftContentEndpointWrapper {
         self.baseURL = url
     }
     
+    /// Gets a Data object for the endpoint and parameters specified. If you are retrieving JSON data, we recommend using getCustomJSONData instead. This method is intended to be used for all non JSON Data
+    ///
+    /// The endpoint is the name of the file that you created in Zesty
+    ///
+    /// A full tutorial to create your own custom JSON Endpoints can be found [here](https://developer.zesty.io/docs/code-editor/customizable-json-endpoints-for-content/)
+    ///
+    /// Sample Usage
+    /// ==========
+    ///
+    /// Using the custom endpoint `event.ics`
+    ///
+    /// Code
+    /// ----
+    ///
+    ///     // Create the ZestySwiftContentEndpointWrapper Object
+    ///     let zesty ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
+    ///     let endpoint = "event.ics"
+    ///     let parameters = ["id" : "7-6a0c3ae-dz5cmr"]
+    ///     getCustomData(from: endpoint, params: parameters, { (data, error) in
+    ///         if (error != nil) {
+    ///             // error handling
+    ///             return
+    ///         }
+    ///         print(data) // data is a Data object. For more information on what the Data object does, [see Apple's documentation](https://developer.apple.com/documentation/foundation/data)
+    ///     }
+    /// - note: ZestySwiftContentEndpointWrapper uses [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) to handle JSON objects. The returned JSON object's methods reference can be found [here](https://github.com/SwiftyJSON/SwiftyJSON#usage). If you want to use a different type of JSON parsing, the raw data can be extracted from the JSON object using `json.rawString(options: [.castNilToNSNull: true])`. More information on extracting the raw JSON String can be found [here](https://github.com/SwiftyJSON/SwiftyJSON#user-content-string-representation)
+    /// - parameters:
+    ///   - endpoint: The endpoint string you are using. The extension is implied to be `.json` unless otherwise specified
+    ///   - params: A Dictionary containing all the parameters. Use `nil` if there are no parameters
+    ///   - completionHandler: Closure that handles the data once it is retrieved. If nothing is found, an empty Data object will be returned instead, and the error will be printed to the console.
+    ///   - data: Returned through the closure, this is the [Data](https://developer.apple.com/documentation/foundation/data) object
+    public func getCustomData(from endpoint: String, params: [String : String]!, completionHandler: @escaping (_ data: Data, _ error: ZestyError?) -> Void) {
+        var paramText = ""
+        if (params != nil) {
+            paramText = "?"
+            paramText += params.map({ (key, value) -> String in
+                return "\(key)=\(value)&"
+            }).reduce("",+)
+        }
+        
+        let urlString = "\(self.baseURL)/-/custom/\(endpoint)\(paramText)"
+        let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
+        
+        Alamofire.request(url, method: .get).validate().responseData { (response) in
+            switch response.result {
+            case .success(let value):
+                completionHandler(value, nil)
+                break
+            case .failure(let error):
+                print("ERROR DUE TO ALAMOFIRE\n\nERROR DESCRIPTION: ")
+                print(error.localizedDescription)
+                print("\n\nEND ERROR DESCRIPTION")
+                completionHandler(Data(), ZestyError.alamofireError)
+                break
+            }
+        }
+    }
+    /// Gets a UIImage for the url specified.
+    /// The url is any url that gives you an image in a compatible format (as specified by UIImage)
+    ///
+    ///
+    /// To get the url for an image zuid in Zesty, you will need to create an image endpoint
+    ///
+    /// image endpoint file
+    ///
+    ///     {
+    ///         {{ if {get_var.id} }}
+    ///             "url" : "{{ get_var.id.getImage()}}"
+    ///         {{ end-if}}
+    ///     }
+    ///
+    ///
+    /// You can then use getCustomJSONData in combination with getImage to get the UIImage you require
+    ///
+    /// Sample Usage
+    /// ==========
+    ///
+    /// After getting the image zuid 3-6a1c0cb-cgo7w from another data call, we use getCustomJSONData and getImage to retrieve our data
+    ///
+    /// Code
+    /// ----
+    ///
+    ///     // Create the ZestySwiftContentEndpointWrapper Object
+    ///     let zesty ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
+    ///     let endpoint = "image" // created to look as the above code details
+    ///     let parameters = ["id" : "3-6a1c0cb-cgo7w"]
+    ///     zesty.getCustomJSONData(from: endpoint, params: parameters { (json, error) in
+    ///         if (error != nil) {
+    ///             // error handling
+    ///             return
+    ///         }
+    ///         let imageURLString = json["url"].stringValue
+    ///         zesty.getImage(imageURLString) { (image, error) in
+    //              if error != nil {
+    //                  imageView.image = image // image is now a UIImage object
+    //              }
+    //          }
+    ///     }
+    /// - note: ZestySwiftContentEndpointWrapper uses [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) to handle JSON objects. The returned JSON object's methods reference can be found [here](https://github.com/SwiftyJSON/SwiftyJSON#usage). If you want to use a different type of JSON parsing, the raw data can be extracted from the JSON object using `json.rawString(options: [.castNilToNSNull: true])`. More information on extracting the raw JSON String can be found [here](https://github.com/SwiftyJSON/SwiftyJSON#user-content-string-representation)
+    /// - parameters:
+    ///   - urlString: The url string where your image is located at. You can get this string in a variety of ways. The url does not need to belong to your zesty.io site, but it must be served over HTTPS unless your App Transport Security Settings allow otherwise.
+    ///   - completionHandler: Closure that handles the data once it is retrieved. If nothing is found, nil be returned instead, and the error will be printed to the console.
+    ///   - image: returned through the closure, this will be nil if error != nil. Otherwise, it will be a UIImage downloaded from the internet
+    public func getImage(for urlString: String, completionHandler: @escaping (_ image: UIImage?, _ error: ZestyError?) -> Void) {
+        var error: ZestyError? = nil
+        if let url = URL(string: urlString) {
+            if let data = try? Data(contentsOf: url) {
+                if let image = UIImage(data: data) {
+                    completionHandler(image, error)
+                    return
+                }
+                else {
+                    error = ZestyError.incorrectShape
+                }
+            }
+            else {
+                error = ZestyError.noData
+            }
+        }
+        else {
+            error = ZestyError.invalidURL
+        }
+        completionHandler(nil, error)
+    }
+    
     /// Gets a [JSON](https://github.com/SwiftyJSON/SwiftyJSON#usage) object for the endpoint and parameters specified
     ///
     /// The endpoint is the name of the file that you created in Zesty
@@ -82,7 +207,7 @@ public class ZestySwiftContentEndpointWrapper {
     ///   - params: A Dictionary containing all the parameters. Use `nil` if there are no parameters
     ///   - completionHandler: Closure that handles the data once it is retrieved. If nothing is found, an empty array will be returned instead, and the error will be printed to the console.
     ///   - data: Returned through the closure, this is the [JSON](https://github.com/SwiftyJSON/SwiftyJSON#usage) object
-    public func getCustomData(from endpoint: String, params: [String : String]!, completionHandler: @escaping (_ data: JSON, _ error: ZestyError?) -> Void) {
+    public func getCustomJSONData(from endpoint: String, params: [String : String]!, completionHandler: @escaping (_ data: JSON, _ error: ZestyError?) -> Void) {
         var paramText = ""
         if (params != nil) {
             paramText = "?"
@@ -100,7 +225,9 @@ public class ZestySwiftContentEndpointWrapper {
                 let json = JSON(value)
                 completionHandler(json, nil)
             case .failure(let error):
+                print("ERROR DUE TO ALAMOFIRE\n\nERROR DESCRIPTION: ")
                 print(error.localizedDescription)
+                print("\n\nEND ERROR DESCRIPTION")
                 completionHandler(JSON.null, ZestyError.alamofireError)
             }
         }
@@ -163,7 +290,9 @@ public class ZestySwiftContentEndpointWrapper {
                 
                 break
             case .failure(let error):
+                print("ERROR DUE TO ALAMOFIRE\n\nERROR DESCRIPTION: ")
                 print(error.localizedDescription)
+                print("\n\nEND ERROR DESCRIPTION")
                 completionHandler([:], ZestyError.alamofireError)
                 break
             }
@@ -249,7 +378,9 @@ public class ZestySwiftContentEndpointWrapper {
                 completionHandler(toReturn, nil)
                 break
             case .failure(let error):
+                print("ERROR DUE TO ALAMOFIRE\n\nERROR DESCRIPTION: ")
                 print(error.localizedDescription)
+                print("\n\nEND ERROR DESCRIPTION")
                 completionHandler([], ZestyError.alamofireError)
                 break
             }

@@ -83,11 +83,11 @@ class ViewController: UIViewController {
             }
         }
         
-        // MARK: getCustomData tests
+        // MARK: getCustomJSONData tests
         // test 1
         var endpoint = "menulist"
         var params: [String:String]! = nil
-        api.getCustomData(from: endpoint, params: params) { (data, error) in
+        api.getCustomJSONData(from: endpoint, params: params) { (data, error) in
             let text = "Testing getCustomData with endpoint \(endpoint) and params \(params)"
             if error != nil {
                 self.appendToTextView([text, error!])
@@ -99,7 +99,7 @@ class ViewController: UIViewController {
         // test 2
         endpoint = "menulist"
         params = ["location" : "San Diego"]
-        api.getCustomData(from: endpoint, params: params) { (data, error) in
+        api.getCustomJSONData(from: endpoint, params: params) { (data, error) in
             let text = "Testing getCustomData with endpoint \(endpoint) and params \(params)"
             if error != nil {
                 self.appendToTextView([text, error!])
@@ -111,7 +111,7 @@ class ViewController: UIViewController {
         // test 3
         endpoint = "menulist"
         params = ["id" : "San Diego"]
-        api.getCustomData(from: endpoint, params: params) { (data, error) in
+        api.getCustomJSONData(from: endpoint, params: params) { (data, error) in
             let text = "Testing getCustomData with endpoint \(endpoint) and params \(params)"
             if error != nil {
                 self.appendToTextView([text, error!])
@@ -123,7 +123,7 @@ class ViewController: UIViewController {
         // test 4
         endpoint = "sjfkldsjfsd"
         params = ["location" : "San Diego"]
-        api.getCustomData(from: endpoint, params: params) { (data, error) in
+        api.getCustomJSONData(from: endpoint, params: params) { (data, error) in
             let text = "Testing getCustomData with endpoint \(endpoint) and params \(params)"
             if error != nil {
                 self.appendToTextView([text, error!])
@@ -133,10 +133,24 @@ class ViewController: UIViewController {
             }
         }
         // test 4
+//        endpoint = "event.ics"
+//        params = ["id" : "7-6a0c3ae-dz5cmr"]
+//        api.getCustomJSONData(from: endpoint, params: params) { (data, error) in
+//            let text = "Testing getCustomData with endpoint \(endpoint) and params \(params)"
+//            if error != nil {
+//                self.appendToTextView([text, error!])
+//            }
+//            else {
+//                self.appendToTextView([text, data])
+//            }
+//        }
+        
+        // MARK: getCustomData tests
+        // test 1
         endpoint = "event.ics"
         params = ["id" : "7-6a0c3ae-dz5cmr"]
         api.getCustomData(from: endpoint, params: params) { (data, error) in
-            let text = "Testing getCustomData with endpoint \(endpoint) and params \(params)"
+            let text = "Testing getCustomData with endpoint event.ics and params \(params)"
             if error != nil {
                 self.appendToTextView([text, error!])
             }
@@ -144,7 +158,19 @@ class ViewController: UIViewController {
                 self.appendToTextView([text, data])
             }
         }
-        
+        // test 2 (uses getImage as well)
+        endpoint = "image" // created to look as the above code details
+        let parameters = ["id" : "3-6a1c0cb-cgo7w"]
+        api.getCustomJSONData(from: endpoint, params: parameters) { (json, error) in
+            if (error != nil) {
+                // error handling
+                return
+            }
+            let imageURLString = json["url"].stringValue
+            self.api.getImage(for: imageURLString) { (image, error) in
+                print(image)
+            }
+        }
     }
     
     func appendToTextView(_ string: [Any]) {
