@@ -43,6 +43,7 @@ For example, creating a ZestyAPI Object for your website `http://burger.zesty.si
     
 - note: If your website does not have an SSL Certificate (HTTPS), you will need to configure your app to allow for non HTTPS Calls. [How to change this setting](https://stackoverflow.com/questions/31254725/transport-security-has-blocked-a-cleartext-http)
 
+
 ### Using Basic JSON API
 
 1. Enable the [Basic JSON API](https://developer.zesty.io/guides/api/basic-api-json-endpoints-guide/) in Config
@@ -56,6 +57,9 @@ Zuid Meanings and Functions to Use
     
 
 #### Getting a Single Item
+`getItem(for: zuid: String, completionHandler: (([String:String], ZestyError?) -> Void)`
+
+
 Gets a `[String : String]` json data for the specific zuid.
     
  You can find the zuid by looking at the **Content** Tab of Zesty.
@@ -70,7 +74,11 @@ Gets a `[String : String]` json data for the specific zuid.
      zesty.getItem(for: zuid, { (item) in
          print(item) // item is a [String : String] dictionary, in JSON Format
      }
+     
+     
 #### Getting an Array
+`getArray(for: zuid: String, completionHandler: (([[String:String]], ZestyError?) -> Void)`
+
 Gets a `[[String : String]]` array of json data for the specific zuid.
     
  You can find the zuid by looking at the **Content** Tab of Zesty.
@@ -89,6 +97,9 @@ Gets a `[[String : String]]` array of json data for the specific zuid.
  	}
 
 ### Using Custom JSON Endpoints
+
+`getCustomJSONData(from: String, params: [String: String], completionHandler: ((JSON, ZestyError?) -> Void)`
+
 Gets a [JSON](https://github.com/SwiftyJSON/SwiftyJSON#usage) object for the endpoint and parameters specified.
 
 - note: ZestyAPI uses [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) to handle JSON objects. Make sure you add `pod 'SwiftyJSON'` to your `Podfile` in order to use the data returned.
@@ -109,9 +120,74 @@ For example, using the custom endpoint `menulist` (Including the extension is on
      let endpoint = "menulist"
      let parameters = ["location" : "San Diego"]
      getCustomJSONData(from: endpoint, params: parameters, { (json) in
-         print(item) // item is a [String : String] dictionary, in JSON Format
+         print(item) // item is a [String : JSON] dictionary of type JSON
      }
+     
+### Using Custom Endpoints (Generic)
+`getCustomData(from: String, params: [String: String], completionHandler: ((Data, ZestyError?) -> Void)`
 
+If you want to use non JSON-based data, you can use this function to get any type of Data. The `Data` object returned is the Swift-Standard [Data](https://developer.apple.com/documentation/foundation/data) object.
+
+
+#### Sample Usage
+For example, using the custom endpoint `menulist` (Including the extension is only necessary for different file types ; .json is otherwise implied)
+    
+ 
+    
+     // Create the ZestySwiftContentEndpointWrapper Object
+     let zesty = ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
+     let endpoint = "someplace"
+     let parameters = ["location" : "San Diego"]
+     getCustomData(from: endpoint, params: parameters, { (json) in
+         print(item) // item is a Data object dictionary
+     }
+   
+### Getting an image
+
+`getImage(for: String, completionHandler: (UIImage, ZestyError?) -> Void)`
+
+The first parameter is **any** url that gives you an image in a compatible format (as specified by UIImage)
+
+
+**Using it with a zesty image zuid**
+
+To get the url for an image zuid in Zesty, you will need to create an image endpoint
+
+image `endpoint` file
+
+    {
+        {{ if {get_var.id} }}
+            "url" : "{{ get_var.id.getImage()}}"
+        {{ end-if}}
+    }
+
+
+You can then use getCustomJSONData in combination with getImage to get the UIImage you require
+
+#### Sample Usage
+
+
+After getting the image zuid 3-6a1c0cb-cgo7w from another data call, we use getCustomJSONData and getImage to retrieve our data
+
+Code
+----
+
+    // Create the ZestySwiftContentEndpointWrapper Object
+    let zesty ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
+    let endpoint = "image" // created to look as the above code details
+    let parameters = ["id" : "3-6a1c0cb-cgo7w"]
+    zesty.getCustomJSONData(from: endpoint, params: parameters { (json, error) in
+        if (error != nil) {
+            // error handling
+            return
+        }
+        let imageURLString = json["url"].stringValue
+        zesty.getImage(imageURLString) { (image, error) in
+    //              if error != nil {
+    //                  imageView.image = image // image is now a UIImage object
+    //              }
+    //          }
+    }  
 ### Example Project
 
 To help you get started, we've also made an [example project](https://github.com/zesty-io/zesty-ios-swift-application-basic-example)
