@@ -177,17 +177,17 @@ Code
     let endpoint = "image" // created to look as the above code details
     let parameters = ["id" : "3-6a1c0cb-cgo7w"]
     zesty.getCustomJSONData(from: endpoint, params: parameters { (json, error) in
-        if (error != nil) {
-            // error handling
-            return
-        }
-        let imageURLString = json["url"].stringValue
-        zesty.getImage(imageURLString) { (image, error) in
-    //              if error != nil {
-    //                  imageView.image = image // image is now a UIImage object
-    //              }
-    //          }
-    }  
+       if (error != nil) {
+           // error handling
+           return
+       }
+       let imageURLString = json["url"].stringValue
+       zesty.getImage(imageURLString) { (image, error) in
+           if error != nil {
+              imageView.image = image // image is now a UIImage object
+           }
+	    }
+	}  
 ### Example Project
 
 To help you get started, we've also made an [example project](https://github.com/zesty-io/zesty-ios-swift-application-basic-example)
