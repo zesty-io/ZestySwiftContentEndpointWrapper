@@ -60,14 +60,14 @@ public class ZestySwiftContentEndpointWrapper {
     /// Sample Usage
     /// ==========
     ///
-    /// Using the custom endpoint `event.ics`
+    /// Using the custom endpoint `/-/custom/event.ics`
     ///
     /// Code
     /// ----
     ///
     ///     // Create the ZestySwiftContentEndpointWrapper Object
     ///     let zesty ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
-    ///     let endpoint = "event.ics"
+    ///     let endpoint = "/-/custom/event.ics"
     ///     let parameters = ["id" : "7-6a0c3ae-dz5cmr"]
     ///     getCustomData(from: endpoint, params: parameters, { (data, error) in
     ///         if (error != nil) {
@@ -78,7 +78,7 @@ public class ZestySwiftContentEndpointWrapper {
     ///     }
     /// - note: ZestySwiftContentEndpointWrapper uses [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) to handle JSON objects. The returned JSON object's methods reference can be found [here](https://github.com/SwiftyJSON/SwiftyJSON#usage). If you want to use a different type of JSON parsing, the raw data can be extracted from the JSON object using `json.rawString(options: [.castNilToNSNull: true])`. More information on extracting the raw JSON String can be found [here](https://github.com/SwiftyJSON/SwiftyJSON#user-content-string-representation)
     /// - parameters:
-    ///   - endpoint: The endpoint string you are using. The extension is implied to be `.json` unless otherwise specified
+    ///   - endpoint: The endpoint string you are using.
     ///   - params: A Dictionary containing all the parameters. Use `nil` if there are no parameters
     ///   - completionHandler: Closure that handles the data once it is retrieved. If nothing is found, an empty Data object will be returned instead, and the error will be printed to the console.
     ///   - data: Returned through the closure, this is the [Data](https://developer.apple.com/documentation/foundation/data) object
@@ -91,7 +91,7 @@ public class ZestySwiftContentEndpointWrapper {
             }).reduce("",+)
         }
         
-        let urlString = "\(self.baseURL)/-/custom/\(endpoint)\(paramText)"
+        let urlString = "\(self.baseURL)/\(endpoint)\(paramText)"
         let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
         
         Alamofire.request(url, method: .get).validate().responseData { (response) in
@@ -185,14 +185,14 @@ public class ZestySwiftContentEndpointWrapper {
     /// Sample Usage
     /// ==========
     ///
-    /// Using the custom endpoint `menulist` (Including the extension is only necessary for different file types ; .json is otherwise implied)
+    /// Using the custom endpoint `/-/custom/menulist.json`
     ///
     /// Code
     /// ----
     ///
     ///     // Create the ZestySwiftContentEndpointWrapper Object
     ///     let zesty ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
-    ///     let endpoint = "menulist"
+    ///     let endpoint = "/-/custom/menulist.json"
     ///     let parameters = ["location" : "San Diego"]
     ///     getCustomData(from: endpoint, params: parameters, { (json, error) in
     ///         if (error != nil) {
@@ -203,7 +203,7 @@ public class ZestySwiftContentEndpointWrapper {
     ///     }
     /// - note: ZestySwiftContentEndpointWrapper uses [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) to handle JSON objects. The returned JSON object's methods reference can be found [here](https://github.com/SwiftyJSON/SwiftyJSON#usage). If you want to use a different type of JSON parsing, the raw data can be extracted from the JSON object using `json.rawString(options: [.castNilToNSNull: true])`. More information on extracting the raw JSON String can be found [here](https://github.com/SwiftyJSON/SwiftyJSON#user-content-string-representation)
     /// - parameters:
-    ///   - endpoint: The endpoint string you are using. The extension is implied to be `.json` unless otherwise specified
+    ///   - endpoint: The endpoint string you are using.
     ///   - params: A Dictionary containing all the parameters. Use `nil` if there are no parameters
     ///   - completionHandler: Closure that handles the data once it is retrieved. If nothing is found, an empty array will be returned instead, and the error will be printed to the console.
     ///   - data: Returned through the closure, this is the [JSON](https://github.com/SwiftyJSON/SwiftyJSON#usage) object
@@ -216,7 +216,7 @@ public class ZestySwiftContentEndpointWrapper {
             }).reduce("",+)
         }
         
-        let urlString = "\(self.baseURL)/-/custom/\(endpoint)\(paramText)"
+        let urlString = "\(self.baseURL)/\(endpoint)\(paramText)"
         let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
         
         Alamofire.request(url, method: .get).validate().responseJSON { response in
