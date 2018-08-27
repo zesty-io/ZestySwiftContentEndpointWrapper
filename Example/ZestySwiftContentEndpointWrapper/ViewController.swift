@@ -13,10 +13,13 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var textView: UITextView!
     var api: ZestySwiftContentEndpointWrapper!
+    var testsPassed = 0
+    var totalTests = 14
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.textView.text = "Initializing Tests..."
+        
         api = ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
         
         // MARK: getItem tests
@@ -24,10 +27,10 @@ class ViewController: UIViewController {
         api.getItem(for: "doesn't exist") { (data, error) in
             let text = "Testing getItem with zuid: doesn't exist"
             if error != nil {
-                self.appendToTextView([text, error!])
+                self.passTest() //supposed to be an error
             }
             else {
-                print(text)
+                self.appendToTextView([text, data])
             }
         }
         // test 2
@@ -37,7 +40,7 @@ class ViewController: UIViewController {
                 self.appendToTextView([text, error!])
             }
             else {
-                print(text)
+                self.passTest()
             }
         }
         // test 3
@@ -47,7 +50,7 @@ class ViewController: UIViewController {
                 self.appendToTextView([text, error!])
             }
             else {
-                print(text)
+                self.passTest()
             }
         }
         
@@ -56,10 +59,10 @@ class ViewController: UIViewController {
         api.getArray(for: "doesn't exist") { (data, error) in
             let text = "Testing getArray with zuid: doesn't exist"
             if error != nil {
-                self.appendToTextView([text, error!])
+                // success, supposed to error
             }
             else {
-                print(text)
+                self.appendToTextView([text, data])
             }
         }
         // test 2
@@ -69,7 +72,7 @@ class ViewController: UIViewController {
                 self.appendToTextView([text, error!])
             }
             else {
-                print(text)
+                self.passTest()
             }
         }
         // test 3
@@ -79,10 +82,20 @@ class ViewController: UIViewController {
                 self.appendToTextView([text, error!])
             }
             else {
-                print(text)
+                self.passTest()
             }
         }
-        
+        // test 4
+        api.getArray(for: "6-4ea27c-45qz75") { (data, error) in
+            let text = "Testing getARray with zuid: 6-4ea27c-45qz75"
+            if error != nil {
+                self.appendToTextView([text, error!])
+            }
+            else {
+                self.passTest()
+            }
+            
+        }
         // MARK: getCustomJSONData tests
         // test 1
         var endpoint = "/-/custom/menulist"
@@ -93,7 +106,7 @@ class ViewController: UIViewController {
                 self.appendToTextView([text, error!])
             }
             else {
-                print(text)
+                self.passTest()
             }
         }
         // test 2
@@ -105,7 +118,7 @@ class ViewController: UIViewController {
                 self.appendToTextView([text, error!])
             }
             else {
-                print(text)
+                self.passTest()
             }
         }
         // test 3
@@ -117,7 +130,7 @@ class ViewController: UIViewController {
                 self.appendToTextView([text, error!])
             }
             else {
-                print(text)
+                self.passTest()
             }
         }
         // test 4
@@ -129,21 +142,9 @@ class ViewController: UIViewController {
                 self.appendToTextView([text, error!])
             }
             else {
-                print(text)
+                self.passTest()
             }
         }
-        // test 4
-//        endpoint = "/-/custom/event.ics"
-//        params = ["id" : "7-6a0c3ae-dz5cmr"]
-//        api.getCustomJSONData(from: endpoint, params: params) { (data, error) in
-//            let text = "Testing getCustomData with endpoint \(endpoint) and params \(params)"
-//            if error != nil {
-//                self.appendToTextView([text, error!])
-//            }
-//            else {
-//                print(text)
-//            }
-//        }
         
         // MARK: getCustomData tests
         // test 1
@@ -155,7 +156,7 @@ class ViewController: UIViewController {
                 self.appendToTextView([text, error!])
             }
             else {
-                print(text)
+                self.passTest()
             }
         }
         // test 2 (uses getImage as well)
@@ -169,13 +170,20 @@ class ViewController: UIViewController {
             let imageURLString = json["url"].stringValue
             self.api.getImage(for: imageURLString) { (image, error) in
                 if (error == nil) {
-                    let imageView = UIImageView(image: image!)
-                    self.view.addSubview(imageView)
+                    //let imageView = UIImageView(image: image!)
+                    //self.view.addSubview(imageView)
                 }
             }
         }
     }
     
+    func passTest() {
+        self.testsPassed += 1
+        self.appendToTextView(["Passed Test, Total Tests Passed: \(self.testsPassed)"])
+        if self.testsPassed >= self.totalTests {
+            self.appendToTextView(["All Tests Passed!"])
+        }
+    }
     func appendToTextView(_ string: [Any]) {
         var text = ""
         string.forEach { (thing) in

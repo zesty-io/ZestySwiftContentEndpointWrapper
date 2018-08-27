@@ -339,13 +339,13 @@ public class ZestySwiftContentEndpointWrapper {
         Alamofire.request(url, method: .get).validate().responseJSON { (response) in
             switch response.result {
             case .success((let value)):
+                print(urlString)
                 let json = JSON(value)
-                //json["data"].arrayValue // list of dictionaries
                 let stringJsonDictArray = json["data"].arrayValue
                 var stringStringDictArray = [[String: String]]()
-                stringJsonDictArray.forEach({ (stringJsonDict) in
-                    stringStringDictArray.append(self.stringJsonDictToStringStringDict(stringJSONDict: stringJsonDict))
-                })
+                for stringJsonDict in stringJsonDictArray {
+                    stringStringDictArray.append(self.stringJsonDictToStringStringDict(stringJSONDict: stringJsonDict["content"]))
+                }
 //
 //                // now we have an array of dictionaries, with multiple versions per value.
 //                var d: [String : [String : String]] = [:]
@@ -382,11 +382,8 @@ public class ZestySwiftContentEndpointWrapper {
     }
     private func stringJsonDictToStringStringDict(stringJSONDict: JSON) -> [String: String] {
         var stringStringDict = [String: String]()
-        stringJSONDict.forEach({ (key, valueJSON) in
-            if let stringValue = valueJSON.string {
-                stringStringDict[key] = stringValue
-            }
-            else {
+        for (key, valueJSON) in stringJSONDict {
+            if let _ = valueJSON.dictionaryObject {
                 var ref = ""
                 switch valueJSON["type"].stringValue {
                 case "image", "images":
@@ -400,7 +397,10 @@ public class ZestySwiftContentEndpointWrapper {
                     stringStringDict["\(key)\((arr.count == 1) ? "" : "_\(index)")"] = obj[ref].stringValue
                 }
             }
-        })
+            else {
+                stringStringDict[key] = valueJSON.stringValue
+            }
+        }
         
         return stringStringDict
     }
