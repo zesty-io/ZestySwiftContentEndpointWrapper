@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.textView.text = "Initializing Tests..."
-        api = ZestySwiftContentEndpointWrapper(url: "https://6c706l48-dev.preview.zestyio.com")
+        api = ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
         
         // MARK: getItem tests
         // test 1
@@ -168,7 +168,10 @@ class ViewController: UIViewController {
             }
             let imageURLString = json["url"].stringValue
             self.api.getImage(for: imageURLString) { (image, error) in
-                print(image)
+                if (error == nil) {
+                    let imageView = UIImageView(image: image!)
+                    self.view.addSubview(imageView)
+                }
             }
         }
     }

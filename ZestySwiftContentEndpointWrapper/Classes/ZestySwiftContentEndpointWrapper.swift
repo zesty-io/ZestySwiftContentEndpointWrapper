@@ -112,30 +112,31 @@ public class ZestySwiftContentEndpointWrapper {
     /// The url is any url that gives you an image in a compatible format (as specified by UIImage)
     ///
     ///
-    /// To get the url for an image zuid in Zesty, you will need to create an image endpoint
-    ///
-    /// image endpoint file
-    ///
-    ///     {
-    ///         {{ if {get_var.id} }}
-    ///             "url" : "{{ get_var.id.getImage()}}"
-    ///         {{ end-if}}
-    ///     }
-    ///
-    ///
-    /// You can then use getCustomJSONData in combination with getImage to get the UIImage you require
-    ///
     /// Sample Usage
     /// ==========
     ///
-    /// After getting the image zuid 3-6a1c0cb-cgo7w from another data call, we use getCustomJSONData and getImage to retrieve our data
+    /// We can use getImage in conjunction with getItem or getArray to download an image from our data
     ///
     /// Code
     /// ----
     ///
     ///     // Create the ZestySwiftContentEndpointWrapper Object
     ///     let zesty ZestySwiftContentEndpointWrapper(url: "http://burger.zesty.site")
-    ///     let endpoint = "image" // created to look as the above code details
+    ///     let zuid = "6-9bfe5c-ntqxrs"
+    ///
+    ///     zesty.getItem(for: zuid, { (item, error) in
+    ///         if (error != nil) {
+    ///             // error handling
+    ///             return
+    ///         }
+    ///         zesty.getImage(for: item["image"]) { (image, error) in
+    ///             if (error != nil) {
+    ///                 // do whatever you want with image now
+    ///             }
+    ///         }
+    ///         print(item) // item is a [String : String] dictionary, in JSON Format
+    ///     }
+    ///     let endpoint = "image" 
     ///     let parameters = ["id" : "3-6a1c0cb-cgo7w"]
     ///     zesty.getCustomJSONData(from: endpoint, params: parameters { (json, error) in
     ///         if (error != nil) {
@@ -275,11 +276,8 @@ public class ZestySwiftContentEndpointWrapper {
             switch response.result {
             case .success((let value)):
                 let json = JSON(value)
-                if let stringJsonDict = json.dictionaryValue["data"] {
-                    var stringStringDict = [String: String]()
-                    stringJsonDict.forEach({ (key, valueJSON) in
-                        stringStringDict[key] = valueJSON.stringValue
-                    })
+                if let stringJsonDict = json["data"].array?.first?["content"] {
+                    let stringStringDict = self.stringJsonDictToStringStringDict(stringJSONDict: stringJsonDict)
                     completionHandler(stringStringDict, nil)
                 }
                 else {
@@ -346,36 +344,32 @@ public class ZestySwiftContentEndpointWrapper {
                 let stringJsonDictArray = json["data"].arrayValue
                 var stringStringDictArray = [[String: String]]()
                 stringJsonDictArray.forEach({ (stringJsonDict) in
-                    var stringStringDict = [String: String]()
-                    stringJsonDict.forEach({ (key, valueJSON) in
-                        stringStringDict[key] = valueJSON.stringValue
-                    })
-                    stringStringDictArray.append(stringStringDict)
+                    stringStringDictArray.append(self.stringJsonDictToStringStringDict(stringJSONDict: stringJsonDict))
                 })
+//
+//                // now we have an array of dictionaries, with multiple versions per value.
+//                var d: [String : [String : String]] = [:]
+//                for dict in stringStringDictArray {
+//                    if let z = dict["_item_zuid"], let version = dict["_version"] {
+//                        if let val = d[z] {
+//                            // val is the [String : String] obj itself
+//                            if Int(val["_version"]!)! < Int(version)! { // if this new thing is a later version
+//                                d[zuid] = dict // update it
+//                            }
+//                        }
+//                        else {
+//                            d[zuid] = dict // initial placement of the zuid
+//                        }
+//                    }
+//                    else {
+//                        completionHandler([], ZestyError.incorrectShape)
+//                    }
                 
-                // now we have an array of dictionaries, with multiple versions per value.
-                var d: [String : [String : String]] = [:]
-                for dict in stringStringDictArray {
-                    if let z = dict["_item_zuid"], let version = dict["_version"] {
-                        if let val = d[z] {
-                            // val is the [String : String] obj itself
-                            if Int(val["_version"]!)! < Int(version)! { // if this new thing is a later version
-                                d[zuid] = dict // update it
-                            }
-                        }
-                        else {
-                            d[zuid] = dict // initial placement of the zuid
-                        }
-                    }
-                    else {
-                        completionHandler([], ZestyError.incorrectShape)
-                    }
                     
                     
-                    
-                }
-                let toReturn = Array(d.values)
-                completionHandler(toReturn, nil)
+//                }
+//                let toReturn = Array(d.values)
+                completionHandler(stringStringDictArray, nil)
                 break
             case .failure(let error):
                 print("ERROR DUE TO ALAMOFIRE\n\nERROR DESCRIPTION: ")
@@ -386,7 +380,30 @@ public class ZestySwiftContentEndpointWrapper {
             }
         }
     }
-    
+    private func stringJsonDictToStringStringDict(stringJSONDict: JSON) -> [String: String] {
+        var stringStringDict = [String: String]()
+        stringJSONDict.forEach({ (key, valueJSON) in
+            if let stringValue = valueJSON.string {
+                stringStringDict[key] = stringValue
+            }
+            else {
+                var ref = ""
+                switch valueJSON["type"].stringValue {
+                case "image", "images":
+                    ref = "url"
+                    break
+                default:
+                    ref = "resourceURI"
+                }
+                let arr = valueJSON["data"].arrayValue
+                for (index, obj) in arr.enumerated() {
+                    stringStringDict["\(key)\((arr.count == 1) ? "" : "_\(index)")"] = obj[ref].stringValue
+                }
+            }
+        })
+        
+        return stringStringDict
+    }
 }
 
 /// Custom Error Class for ZestySwiftContentEndpointWrapper Errors
