@@ -262,13 +262,13 @@ public class ZestySwiftContentEndpointWrapper {
     ///         }
     ///         print(item) // item is a [String : String] dictionary, in JSON Format
     ///     }
-    /// - note: Using this function requires basic json endpoints to be [enabled](https://developer.zesty.io/guides/api/basic-api-json-endpoints-guide/).
+    /// - note: Using this function requires instant json endpoints to be [enabled](https://developer.zesty.io/guides/api/basic-api-json-endpoints-guide/).
     /// - parameters:
     ///   - zuid: The zuid for the item in question. It should start with a 7 when using this function
     ///   - completionHandler: Closure that handles the data once it is retrieved. If nothing is found, an empty array will be returned instead
     ///   - data: Returned through the closure, this is the [String : String] dictionary, in JSON Format
     public func getItem(for zuid: String, completionHandler: @escaping (_ data: [String : String], _ error: ZestyError?) -> Void) {
-        let urlString = "\(self.baseURL)/-/basic-content/\(zuid).json"
+        let urlString = "\(self.baseURL)/-/instant/\(zuid).json"
         let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
         
         Alamofire.request(url, method: .get).validate().responseJSON { (response) in
@@ -281,7 +281,7 @@ public class ZestySwiftContentEndpointWrapper {
                     completionHandler(stringStringDict, nil)
                 }
                 else {
-                    print("data incorrect shape. Go to <your_url>/-/basic-content/<zuid>.json to see if the json is loading properly. If the problem persists, contact support @ http://chat.zesty.io/")
+                    print("data incorrect shape. Go to \(self.baseURL)/-/instant/<zuid>.json to see if the json is loading properly. If the problem persists, contact support @ http://chat.zesty.io/")
                     
                     completionHandler([:], ZestyError.incorrectShape)
                 }
@@ -333,7 +333,7 @@ public class ZestySwiftContentEndpointWrapper {
     ///   - completionHandler: Closure that handles the data once it is retrieved. If nothing is found, an empty array will be returned instead
     ///   - data: Returned through the closure, this is the [[String : String]] array of dictionaries
     public func getArray(for zuid: String, completionHandler: @escaping (_ data : [[String : String]], _ error: ZestyError?) -> Void) {
-        let urlString = "\(self.baseURL)/-/basic-content/\(zuid).json"
+        let urlString = "\(self.baseURL)/-/instant/\(zuid).json"
         let url = URL(string: urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
         
         Alamofire.request(url, method: .get).validate().responseJSON { (response) in
@@ -346,29 +346,6 @@ public class ZestySwiftContentEndpointWrapper {
                 for stringJsonDict in stringJsonDictArray {
                     stringStringDictArray.append(self.stringJsonDictToStringStringDict(stringJSONDict: stringJsonDict["content"]))
                 }
-//
-//                // now we have an array of dictionaries, with multiple versions per value.
-//                var d: [String : [String : String]] = [:]
-//                for dict in stringStringDictArray {
-//                    if let z = dict["_item_zuid"], let version = dict["_version"] {
-//                        if let val = d[z] {
-//                            // val is the [String : String] obj itself
-//                            if Int(val["_version"]!)! < Int(version)! { // if this new thing is a later version
-//                                d[zuid] = dict // update it
-//                            }
-//                        }
-//                        else {
-//                            d[zuid] = dict // initial placement of the zuid
-//                        }
-//                    }
-//                    else {
-//                        completionHandler([], ZestyError.incorrectShape)
-//                    }
-                
-                    
-                    
-//                }
-//                let toReturn = Array(d.values)
                 completionHandler(stringStringDictArray, nil)
                 break
             case .failure(let error):

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ZestySwiftContentEndpointWrapper'
-  s.version          = '0.3.1'
+  s.version          = '0.3.2'
   s.summary          = 'An easy way to access the Zesty.io Basic JSON API as well as your own custom JSON Endpoints.'
   s.swift_version = '4.0'
 
